@@ -1,7 +1,7 @@
 openapi: "3.0.3"
 info:
-  title: Products RestFul API
-  description: This is products RestFul API by Yadi Apriyadi
+  title: Products RESTFUL API
+  description: This is RESTFUL API product documentation by Yadi Apriyadi
   termsOfService: https://www.google.com
   contact:
     name: Yadi Apriyadi
@@ -23,6 +23,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200register"
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
         
@@ -37,6 +39,8 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/200login"
+        "400":
+          $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
   /products:
@@ -79,6 +83,8 @@ paths:
         - "Products"
       summary: Update data product
       description: Return your current update data product
+      parameters:
+        - $ref: "#/components/parameters/ParamId"
       requestBody:
         $ref: "#/components/requestBodies/ProductUpdateBody"
       responses:
@@ -96,7 +102,7 @@ paths:
       summary: Delete product
       description: Return boolean
       parameters:
-        - $ref: "#/components/parameters/QueryId"
+        - $ref: "#/components/parameters/ParamId"
       responses:
         "200":
           $ref: "#/components/responses/200delete"
@@ -150,6 +156,17 @@ components:
         with spaces:
           description: Example query name with spaces see the url-encode docs [here](https://www.urlencoder.org/)
           value: /?name=mie%20ayam
+    ParamId:
+      name: id
+      in: path
+      required: true
+      description: Parameter product id
+      schema:
+        type: string
+      examples:
+        example 1:
+          description: Example bakso param id
+          value: /1
     QueryId:
       name: id
       in: query
@@ -165,11 +182,11 @@ components:
           description: Example 2 (combine with query name)
           value: /?id=2&name=bakso
   schemas:
-    SchemaProducts:
+    SchemaProduct:
       type: object
       properties:
         id:
-          type: string
+          type: integer
         name:
           type: string
           minLength: 1
@@ -180,13 +197,11 @@ components:
           minLength: 1
           required:
             - "true"
-    SchemaUsers:
+    SchemaUser:
       type: object
       properties:
         id:
-          type: string
-          required:
-            - "false"
+          type: integer
         username:
           type: string
           minLength: 3
@@ -204,11 +219,11 @@ components:
     SchemaArrayUsersList:
       type: array
       items:
-        $ref: "#/components/schemas/SchemaUsers"
+        $ref: "#/components/schemas/SchemaUser"
     SchemaArrayProductsList:
       type: array
       items:
-        $ref: "#/components/schemas/SchemaProducts"
+        $ref: "#/components/schemas/SchemaProduct"
     SchemaBad:
       type: object
       properties:
@@ -305,7 +320,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             responseSuccess:
               $ref: "#/components/examples/ExampleSuccess"
@@ -314,7 +329,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             responseSuccess:
               $ref: "#/components/examples/ExampleSuccessUpdate"
@@ -323,7 +338,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             responseSuccess:
               $ref: "#/components/examples/ExampleSuccessDelete"
@@ -332,7 +347,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             responseSuccess:
               $ref: "#/components/examples/ExampleSuccessRegister"
@@ -341,7 +356,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             responseSuccess:
               $ref: "#/components/examples/ExampleSuccessLogin"
@@ -370,7 +385,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaUsers"
+            $ref: "#/components/schemas/SchemaUser"
           examples:
             reqUserBody:
               $ref: "#/components/examples/ExampleAuthBody"
@@ -380,7 +395,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaProducts"
+            $ref: "#/components/schemas/SchemaProduct"
           examples:
             reqUserBody:
               $ref: "#/components/examples/ExampleAddProductBody"
@@ -390,7 +405,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaProducts"
+            $ref: "#/components/schemas/SchemaProduct"
           examples:
             reqUserBody:
               $ref: "#/components/examples/ExampleUpdateProductBody"
@@ -400,7 +415,7 @@ components:
       content:
         "application/json":
           schema:
-            $ref: "#/components/schemas/SchemaProducts"
+            $ref: "#/components/schemas/SchemaProduct"
           examples:
             reqUserBody:
               $ref: "#/components/examples/ExampleDeleteProductBody"
