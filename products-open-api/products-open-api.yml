@@ -75,7 +75,7 @@ paths:
           $ref: "#/components/responses/400"
         "404":
           $ref: "#/components/responses/404"
-  /products/{productsId}:
+  /products/{productId}:
     put:
       security:
         - usersAuth: []
