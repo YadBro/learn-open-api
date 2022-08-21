@@ -1,0 +1,575 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "TodoList RestFul API",
+    "description": "This is a sample open api",
+    "termsOfService": "https://www.google.com",
+    "contact": {
+      "name": "Yadi Apriyadi",
+      "url": "https://www.google.com",
+      "email": "galihbatu098@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1"
+  },
+  "servers": [
+    {
+      "description": "Todo List sample dev environment",
+      "url": "https://{environment}.yadiganteng.com/api/v1",
+      "variables": {
+        "environment": {
+          "default": "dev",
+          "description": "Server Environment",
+          "enum": ["dev", "qa", "prod"]
+        }
+      }
+    }
+  ],
+  "externalDocs": {
+    "description": "Youtube YadBro Channel",
+    "url": "https://www.youtube.com/c/yadbrochannel"
+  },
+  "paths": {
+    "/todolist": {
+      "get": {
+        "security": [
+          {
+            "TodoListAuth": []
+          }
+        ],
+        "tags": ["TodoList"],
+        "summary": "Get all todolist",
+        "description": "Return all todo list",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Filter todolist by name",
+            "schema": {
+              "type": "string",
+              "nullable": true,
+              "example": "/?name=yadi"
+            },
+            "examples": {
+              "javascript": {
+                "description": "Example name in javascript",
+                "value": "javascript"
+              },
+              "go-lang": {
+                "description": "Example name in go-lang",
+                "value": "Golang"
+              }
+            }
+          },
+          {
+            "name": "age",
+            "in": "query",
+            "required": false,
+            "description": "Filter todolist by age",
+            "schema": {
+              "type": "number",
+              "example": "/?age=15",
+              "nullable": true,
+              "maximum": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayTodoLists"
+                },
+                "examples": {
+                  "success": {
+                    "description": "Example success get all todolist.",
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "Cooking with chef juna",
+                        "priority": 1,
+                        "tags": ["Cooks", "Cooking", "Chef"]
+                      },
+                      {
+                        "id": 2,
+                        "name": "Learn OpenApi With Mr.Eko Khannedy",
+                        "priority": 1,
+                        "tags": ["Programming", "API", "Restful API"]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "error": {
+                    "description": "Example error get all todolist.",
+                    "value": {
+                        "message": "Error while retrieving all data todolist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "TodoListAuth": []
+          }
+        ],
+        "tags": ["TodoList"],
+        "summary": "Create new todolist",
+        "description": "Create new todolist into database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrUpdateTodoList"
+              },
+              "examples": {
+                "Javascript": {
+                  "description": "Example create todolist in javascript",
+                  "value": {
+                    "name": "Javascript",
+                    "tags": ["Javascript", "Pemograman"],
+                    "priority": 3
+                  }
+                },
+                "Golang": {
+                  "description": "Example create todolist in golang",
+                  "value": {
+                    "name": "Golang",
+                    "tags": ["Golang", "Pemograman"],
+                    "priority": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoList"
+                },
+                "examples": {
+                  "Cookings": {
+                    "description": "Example success create new todoList",
+                    "value": {
+                      "id": 3,
+                      "name": "Cookings",
+                      "tags": ["Cooks", "Chef"],
+                      "priority": 1
+                    }
+                  },
+                  "Vue": {
+                    "description": "Example success create new todoList",
+                    "value": {
+                      "id": 4,
+                      "name": "VueJs",
+                      "tags": ["Pemograman", "Front End"],
+                      "priority": 4
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "error": {
+                    "description": "Example error get all todolist.",
+                    "value": {
+                        "message": "Error while retrieving all data todolist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/todolist/{todoListId}": {
+      "get": {
+        "security": [
+          {
+            "TodoListAuth": []
+          }
+        ],
+        "tags": ["TodoList"],
+        "summary": "Get one data todolist",
+        "description": "Return one data todolist by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TodoListId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get one data todolist by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoList"
+                },
+                "example": {
+                  "id": 3,
+                  "name": "Javascript Updated",
+                  "tags": ["Javascript", "Pemograman"],
+                  "priority": 4
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "TodoListAuth": []
+          }
+        ],
+        "tags": ["TodoList"],
+        "summary": "Update todolist",
+        "description": "Update an existing todolist in database",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TodoListId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "nullable": false,
+                    "required": ["false"]
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "format": "int32",
+                    "required": ["false"],
+                    "default": 1
+                  },
+                  "tags": {
+                    "type": "array",
+                    "required": ["false"],
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "examples": {
+                "Javascript": {
+                  "description": "Example updated todolist in javascript",
+                  "value": {
+                    "name": "Javascript",
+                    "tags": ["Javascript", "Pemograman"],
+                    "priority": 3
+                  }
+                },
+                "Golang": {
+                  "description": "Example updated todolist in golang",
+                  "value": {
+                    "name": "Golang",
+                    "tags": ["Golang", "Pemograman"],
+                    "priority": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success update to todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodoList"
+                },
+                "examples": {
+                  "javascript": {
+                    "description": "Example success create new todolist.",
+                    "value": {
+                      "id": 3,
+                      "name": "Javascript Updated",
+                      "tags": ["Javascript", "Pemograman"],
+                      "priority": 4
+                    }
+                  },
+                  "golang": {
+                    "description": "Example success create new todolist.",
+                    "value": {
+                      "id": 4,
+                      "name": "Golang Updated",
+                      "tags": ["Golang", "Pemograman"],
+                      "priority": 5
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "error": {
+                    "description": "Example error get all todolist.",
+                    "value": {
+                        "message": "Error while retrieving all data todolist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "TodoListAuth": []
+          }
+        ],
+        "tags": ["TodoList"],
+        "summary": "Delete todolist",
+        "description": "Delete a todolist by id",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/TodoListId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "examples": {
+                  "javascript": {
+                    "description": "Example success deleted todolist.",
+                    "value": {
+                      "success": true
+                    }
+                  },
+                  "golang": {
+                    "description": "Example success deleted todolist.",
+                    "value": {
+                      "success": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Todolist id not found!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "examples": {
+                  "failed": {
+                    "description": "Example not found todoListId.",
+                    "value": {
+                        "success": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error get all data todolist.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "error": {
+                    "description": "Example error get all todolist.",
+                    "value": {
+                        "message": "Error while retrieving all data todolist."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "TodoListId": {
+        "name": "todoListId",
+        "in": "path",
+        "required": true,
+        "description": "ID of todolist is needs to be updated",
+        "schema": {
+          "type": "number"
+        },
+        "examples": {
+          "javascript": {
+            "description": "Example todolistId in javascript",
+            "value": "1"
+          },
+          "go-lang": {
+            "description": "Example todolistId in go-lang",
+            "value": "1"
+          }
+        }
+      }
+    },
+    "schemas": {
+      "TodoList": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false,
+            "required": ["true"]
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32",
+            "required": ["true"],
+            "nullable": false,
+            "default": 1
+          },
+          "tags": {
+            "type": "array",
+            "required": ["false"],
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "CreateOrUpdateTodoList": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "nullable": false,
+            "required": ["true"]
+          },
+          "priority": {
+            "type": "integer",
+            "format": "int32",
+            "required": ["true"],
+            "nullable": false,
+            "default": 1
+          },
+          "tags": {
+            "type": "array",
+            "required": ["false"],
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "ArrayTodoLists": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TodoList"
+        }
+      }
+    },
+    "securitySchemes": {
+      "TodoListAuth": {
+        "description": "Authenctication for TodoList RESTFUL API",
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}
